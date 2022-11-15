@@ -110,7 +110,35 @@ func CreateUser(req events.APIGatewayProxyRequest, tableName string, dynamoClien
 		return &user, nil
 }
 
-func UpdateUser(email string, tableName string, dynamoClient dynamodbiface.DynamoDBAPI) {
+func UpdateUser(req events.APIGatewayProxyRequest, tableName string, dynamoClient dynamodbiface.DynamoDBAPI) (*User, error) {
+		var user User
+
+		if err := json.Unmarshal([]byte(req.Body), &user); err != nil {
+			return nil, errors.New(ErrorInvalidUserData)
+		}
+
+		currUser, _ := FetchUser(user.Email, tableName, dynamoClient)
+
+		if currUser != nil && len(currUser.Email) == 0 {
+			return nil, errors.New(ErrorUserDoesNotExist)
+		}
+
+		av, err := dynamodbattribute.MarshalMap(user)
+		if err != nil {
+			return nil, errors.New(ErrorCouldNotMarshalItem)
+		}
+
+		input:= &dynamodb.PutItemInput{
+			Item: av,
+			TableName: aws.String(tableName),
+		}
+
+		_, err = dynamoClient.PutItem(input)
+		if err != nil {
+			return nil, errors.New(ErrorDynamoCouldNotPutItem)
+		}
+
+		return &user, nil
 
 }
 
