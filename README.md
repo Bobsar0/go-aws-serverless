@@ -27,10 +27,10 @@ This program is serverless meaning that it doesn't incorporate a server and thus
 #### Local Test
 Use curl, POSTMAN or equivalent API platform to test the following APIs:
 
-POST "{apiUrl}" (Create a new user)
+- POST "{apiUrl}" (Create a new user)
 body: {"email": "...", "firstName": "...", "lastName": "..."}
-GET "{apiUrl}" (Get all users)
-GET "{apiUrl}?email=..." (Get a user by email)
-PUT "{apiUrl}" (Update a user)
+- GET "{apiUrl}" (Get all users)
+- GET "{apiUrl}?email=..." (Get a user by email)
+- PUT "{apiUrl}" (Update a user)
 body: {"email": "...", "firstName": "...", "lastName": "..."}
-DELETE "{apiUrl}?email=..." (Delete a user by email)
+- DELETE "{apiUrl}?email=..." (Delete a user by email)
